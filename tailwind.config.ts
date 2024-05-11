@@ -1,20 +1,133 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+import { Config } from "tailwindcss";
+const config = {
+  darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
+  prefix: "",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "mesh-background": "url('/images/mesh-background.jpg')",
+      },
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        "neutral-1": "#ffffff",
+        "neutral-2": "#fcfcfc",
+        "neutral-3": "#f5f5f5",
+        "neutral-4": "#f0f0f0",
+        "neutral-5": "#d9d9d9",
+        "neutral-6": "#bfbfbf",
+        "neutral-7": "#8c8c8c",
+        "neutral-8": "#595959",
+        "neutral-9": "#454545",
+        "neutral-10": "#262626",
+        "neutral-11": "#1f1f1f",
+        "neutral-12": "#141414",
+        "neutral-13": "#000000",
+        "brand-primary": "#f3e6d5",
+        "brand-secondary": "#f3478a",
+        "brand-accent": "#30212a",
+        "secondary-50": "#feedf3",
+        "secondary-100": "#fbc6db",
+        "secondary-200": "#f9aac9",
+        "secondary-300": "#f784b1",
+        "secondary-400": "#f56ca1",
+        "secondary-500": "#f3478a",
+        "secondary-600": "#dd417e",
+        "secondary-700": "#ad3262",
+        "secondary-800": "#86274c",
+        "secondary-900": "#661e3a",
+        "accent-50": "#eae9ea",
+        "accent-100": "#bfbabd",
+        "accent-200": "#a0999d",
+        "accent-300": "#746a70",
+        "accent-400": "#594d55",
+        "accent-500": "#30212a",
+        "accent-600": "#2c1e26",
+        "accent-700": "#22171e",
+        "accent-800": "#1a1217",
+        "accent-900": "#140e12",
+        "primary-50": "#fefdfb",
+        "primary-100": "#fbf7f2",
+        "primary-200": "#f9f4ec",
+        "primary-300": "#f7eee3",
+        "primary-400": "#f5ebdd",
+        "primary-500": "#f3e6d5",
+        "primary-600": "#ddd1c2",
+        "primary-700": "#ada397",
+        "primary-800": "#867f75",
+        "primary-900": "#666159",
+      },
+      fontFamily: {
+        sans: ["var(--font-montserrat)", "system-ui", "sans-serif"],
+        serif: ["var(--font-eb-garamond)", "serif"],
+        cosiAzure: ["var(--font-cosi-azure)", "serif"],
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [],
-};
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
+
 export default config;
