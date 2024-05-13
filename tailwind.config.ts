@@ -19,6 +19,8 @@ const config = {
     extend: {
       backgroundImage: {
         "mesh-background": "url('/images/mesh-background.jpg')",
+        "mesh-background-2": "url('/images/mesh-background-2.jpg')",
+        "noise-background": "url('/images/noise.png')",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -103,13 +105,14 @@ const config = {
       },
       fontFamily: {
         sans: ["var(--font-montserrat)", "system-ui", "sans-serif"],
-        serif: ["var(--font-eb-garamond)", "serif"],
+        serif: ["var(--font-garmond)", "serif"],
         cosiAzure: ["var(--font-cosi-azure)", "serif"],
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "32px",
+        md: "16px",
+        sm: "8px",
+        tiny: "4px",
       },
       keyframes: {
         "accordion-down": {

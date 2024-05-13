@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Montserrat, EB_Garamond } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import ExpensesProvider from "@/components/providers/ExpensesProvider";
 
 const cosiAzure = localFont({
   src: [
@@ -20,14 +21,36 @@ const cosiAzure = localFont({
   variable: "--font-cosi-azure",
   display: "swap",
 });
+const garmond = localFont({
+  src: [
+    {
+      path: "../../public/fonts/Garmond-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Garmond-Regular.woff", // Add the WOFF source
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Garmond-Bold.woff2", // Add the WOFF source
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Garmond-Bold.woff", // Add the WOFF source
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-garmond",
+  display: "swap",
+});
 
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
-});
-const ebGaramond = EB_Garamond({
-  subsets: ["latin"],
-  variable: "--font-eb-garamond",
 });
 
 export const metadata: Metadata = {
@@ -45,12 +68,12 @@ export default function RootLayout({
       <body
         className={cn(
           montserrat.variable,
-          ebGaramond.variable,
+          garmond.variable,
           cosiAzure.variable,
-          "font-sans",
+          "font-sans text-neutral-10",
         )}
       >
-        {children}
+        <ExpensesProvider>{children}</ExpensesProvider>
       </body>
     </html>
   );
