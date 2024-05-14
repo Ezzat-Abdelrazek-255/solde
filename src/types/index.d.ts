@@ -5,6 +5,16 @@ type Expense = {
   category: string;
   date: Date;
 };
+
+type Budget = {
+  id: string;
+  amount: number;
+  spent: number;
+  remaining: number;
+  category: string;
+  startDate: Date;
+  endDate: Date;
+};
 type Option = {
   label: string;
   value: string;
