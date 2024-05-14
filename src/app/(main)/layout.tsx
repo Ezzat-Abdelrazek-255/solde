@@ -8,7 +8,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <Sidebar />
         <main className="w-full py-[72px] text-neutral-10">{children}</main>
       </div>
-      <div className="bg-noise-background absolute inset-0 opacity-50 mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-noise-background opacity-50 mix-blend-overlay"></div>
     </div>
   );
 };

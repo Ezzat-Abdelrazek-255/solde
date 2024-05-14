@@ -110,27 +110,31 @@ export function TableHeaderComboBox({
               ))}
             </CommandGroup>
           </CommandList>
-          <CommandSeparator className="my-[1px] bg-brand-accent/50" />
-          <CommandList>
-            <CommandGroup>
-              <Button
-                className="h-auto w-full rounded-sm border-none bg-brand-primary px-0 py-2 text-center  ring-0 hover:bg-brand-accent hover:text-brand-primary"
-                variant="outline"
-                onClick={() =>
-                  expensesContext.setFilteredHeaders((prevHeaders) =>
-                    prevHeaders.map((prevHeader) => {
-                      if (prevHeader.label === header.label)
-                        return { ...header, visible: false };
-                      else return prevHeader;
-                    }),
-                  )
-                }
-              >
-                <EyeOff className="mr-2 h-4 w-4" />
-                Hide
-              </Button>
-            </CommandGroup>
-          </CommandList>
+          {header.label !== "Description" && (
+            <>
+              <CommandSeparator className="my-[1px] bg-brand-accent/50" />
+              <CommandList>
+                <CommandGroup>
+                  <Button
+                    className="h-auto w-full rounded-sm border-none bg-brand-primary px-0 py-2 text-center  ring-0 hover:bg-brand-accent hover:text-brand-primary"
+                    variant="outline"
+                    onClick={() =>
+                      expensesContext.setFilteredHeaders((prevHeaders) =>
+                        prevHeaders.map((prevHeader) => {
+                          if (prevHeader.label === header.label)
+                            return { ...header, visible: false };
+                          else return prevHeader;
+                        }),
+                      )
+                    }
+                  >
+                    <EyeOff className="mr-2 h-4 w-4" />
+                    Hide
+                  </Button>
+                </CommandGroup>
+              </CommandList>
+            </>
+          )}
         </Command>
       </PopoverContent>
     </Popover>

@@ -1,9 +1,51 @@
 "use client";
-import Input from "@/components/input";
+import Input from "@/components/Input";
+import Loader from "@/components/Loader";
+import { useAuth } from "@/components/providers/AuthProvider";
 import Link from "next/link";
 import React from "react";
-
+import { useRouter } from "next/navigation";
 const SignUpPage = () => {
+  const authContext = useAuth();
+
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    authContext.setUsername(username);
+    authContext.setEmail(email);
+    authContext.setPassword(password);
+    setIsLoading(true);
+    const formData = {
+      username,
+      email,
+      password,
+    };
+
+    // console.log(event);
+    const res = await fetch("/api/sign-up", {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const user = await res.json();
+
+    setIsLoading(false);
+    if (!user.data) return;
+
+    router.push("/dashboard");
+    authContext.setUserId(user.data.user._id);
+    authContext.setIsLoggedIn(true);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -12,13 +54,31 @@ const SignUpPage = () => {
           Create an account to manage your expenses
         </p>
       </div>
-      <form action="#" className="flex flex-col gap-6">
+      <form action="#" onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-[20px]" htmlFor="username">
+              username
+            </label>
+            <Input
+              onChange={(e) => setUsername(e.target.value)}
+              type="text"
+              value={username}
+              id="username"
+              required
+            />
+          </div>
           <div className="flex flex-col gap-2">
             <label className="text-[20px]" htmlFor="email">
               Email
             </label>
-            <Input type="email" id="email" />
+            <Input
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              value={email}
+              id="email"
+              required
+            />
           </div>
           <div className="flex flex-col gap-2">
             <div>
@@ -31,14 +91,22 @@ const SignUpPage = () => {
                 </li>
               </ul>
             </div>
-            <Input type="password" id="password" min={8} />
+            <Input
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              id="password"
+              value={password}
+              min={8}
+              required
+            />
           </div>
         </div>
         <button
+          disabled={isLoading}
           type="submit"
           className="w-full rounded-sm bg-brand-accent py-4 font-serif text-2xl text-background transition-all hover:bg-brand-accent/90"
         >
-          Sign in
+          {isLoading ? <Loader /> : "Sign up"}
         </button>
       </form>
       <div className="flex justify-center gap-2">

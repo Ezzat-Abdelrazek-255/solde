@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import ExpensesProvider from "@/components/providers/ExpensesProvider";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const cosiAzure = localFont({
   src: [
@@ -73,7 +74,9 @@ export default function RootLayout({
           "font-sans text-neutral-10",
         )}
       >
-        <ExpensesProvider>{children}</ExpensesProvider>
+        <AuthProvider>
+          <ExpensesProvider>{children}</ExpensesProvider>
+        </AuthProvider>
       </body>
     </html>
   );

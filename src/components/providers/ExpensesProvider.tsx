@@ -1,8 +1,10 @@
 "use client";
 
 import { EXPENSE_TABLE_HEADERS } from "@/constants";
-import React from "react";
+import React, { useEffect } from "react";
 import { useContext, createContext, useReducer } from "react";
+import Loader from "../Loader";
+import { connectDB } from "@/lib/db/connectDB";
 
 type ExpensesContextType = {
   FilteredExpenses: Expense[];
@@ -16,64 +18,6 @@ type ExpensesContextType = {
   resetFilters: () => void;
   addExpense: (expense: Expense) => void;
 };
-const mockExpenses = [
-  {
-    id: "1",
-    description: "Weekly Groceries",
-    amount: 75.99,
-    date: new Date("2024-05-08"),
-    category: "Groceries",
-  },
-  {
-    id: "2",
-    description: "Electricity Bill",
-    amount: 120.25,
-    date: new Date("2024-05-05"),
-    category: "Utilities",
-  },
-  {
-    id: "3",
-    description: "Dining at Italian Restaurant",
-    amount: 45.75,
-    date: new Date("2024-05-03"),
-    category: "Dining Out",
-  },
-  {
-    id: "4",
-    description: "Gas for Car",
-    amount: 35.67,
-    date: new Date("2024-05-07"),
-    category: "Transportation",
-  },
-  {
-    id: "5",
-    description: "Gym Membership",
-    amount: 60.0,
-    date: new Date("2024-05-01"),
-    category: "Health & Fitness",
-  },
-  {
-    id: "6",
-    description: "Movie Tickets",
-    amount: 24.0,
-    date: new Date("2024-05-06"),
-    category: "Entertainment",
-  },
-  {
-    id: "7",
-    description: "Online Subscription",
-    amount: 8.99,
-    date: new Date("2024-05-13"),
-    category: "Subscriptions",
-  },
-  {
-    id: "8",
-    description: "Birthday Gift",
-    amount: 30.0,
-    date: new Date("2024-05-02"),
-    category: "Gifts",
-  },
-];
 
 const ExpensesTableContext = createContext<ExpensesContextType>({
   FilteredExpenses: [],
@@ -102,14 +46,53 @@ const filtersInitialState: Filter[] = [
 ];
 
 const ExpensesProvider = ({ children }: { children: React.ReactNode }) => {
-  const [FilteredExpenses, setFilteredExpenses] =
-    React.useState<Expense[]>(mockExpenses);
+  const [FilteredExpenses, setFilteredExpenses] = React.useState<Expense[]>([]);
 
   const [filteredHeaders, setFilteredHeaders] =
     React.useState<TableHeader[]>(headersInitialState);
 
   const [sortType, setSortType] = React.useState<SortType>("");
   const [filters, setFilters] = React.useState<Filter[]>(filtersInitialState);
+
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    async function getExpenses() {
+      try {
+        setIsLoading(true);
+
+        const res = await fetch(
+          `/api/user/${localStorage.getItem("user-id")}/expenses`,
+        );
+        const { data } = await res.json();
+        if (!data) return;
+        const expenses = data.map(
+          (expense: {
+            _id: string;
+            description: string;
+            amount: number;
+            date: string;
+            category: string;
+          }) => {
+            return {
+              id: expense._id,
+              description: expense.description,
+              amount: expense.amount,
+              date: new Date(expense.date),
+              category: expense.category,
+            };
+          },
+        );
+
+        setFilteredExpenses(expenses);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    getExpenses();
+  }, []);
 
   const resetFilters = () => {
     setFilters(filtersInitialState);
@@ -134,7 +117,13 @@ const ExpensesProvider = ({ children }: { children: React.ReactNode }) => {
         addExpense,
       }}
     >
-      {children}
+      {isLoading ? (
+        <div className="grid min-h-screen place-content-center bg-brand-primary">
+          <Loader size={12} />
+        </div>
+      ) : (
+        children
+      )}
     </ExpensesTableContext.Provider>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -24,27 +24,52 @@ import { DatePicker } from "./DatePicker";
 import { CATEGORIES } from "@/constants";
 import { Button } from "./ui/button";
 import { useExpenses } from "./providers/ExpensesProvider";
+import Loader from "./Loader";
+import { useAuth } from "./providers/AuthProvider";
 
 const CreateExpense = () => {
   const expensesContext = useExpenses();
+  const authContext = useAuth();
   const [description, setDescription] = React.useState("");
   const [amount, setAmount] = React.useState(0);
   const [category, setCategory] = React.useState("");
   const [date, setDate] = React.useState<Date>(new Date());
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    expensesContext.addExpense({
-      id: "10",
-      description,
-      amount,
-      date,
-      category,
-    });
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/expense", {
+        method: "POST",
+        body: JSON.stringify({
+          description,
+          amount,
+          date,
+          category,
+          user: authContext.userId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const { data } = await res.json();
+      const newExpense = {
+        id: data._id,
+        description,
+        amount,
+        date,
+        category,
+      };
 
-    setDialogOpen(false);
+      expensesContext.addExpense(newExpense);
+      setDialogOpen(false);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -63,64 +88,68 @@ const CreateExpense = () => {
             done.
           </DialogDescription>
         </DialogHeader>
-        <form
-          onSubmit={handleFormSubmit}
-          action="#"
-          className="grid grid-cols-2 grid-rows-2 gap-4"
-        >
-          <div>
-            <label htmlFor="description">Description</label>
-            <input
-              className="w-full rounded-tiny px-2 py-1 ring-1 ring-brand-accent"
-              type="text"
-              id="description"
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="amount">Amount</label>
-            <input
-              className="w-full rounded-tiny px-2 py-1 ring-1 ring-brand-accent"
-              type="number"
-              id="amount"
-              onChange={(e) => setAmount(Number(e.target.value))}
-              value={amount}
-              required
-            />
-          </div>
-          <div>
-            <Select
-              onValueChange={(value) => setCategory(value)}
-              value={category}
-              required
-            >
-              <SelectTrigger className="rounded-sm ring-1 ring-brand-accent">
-                <SelectValue placeholder="Select a Category" />
-              </SelectTrigger>
-              <SelectContent className="bg-brand-accent text-brand-primary">
-                <SelectGroup>
-                  <SelectLabel className="text-base">Categories</SelectLabel>
-                  {CATEGORIES.map((category) => (
-                    <SelectItem key={category.value} value={category.value}>
-                      {category.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <DatePicker date={date} setDate={setDate} />
-          </div>
-          <Button
-            type="submit"
-            className="col-start-2 flex items-center gap-2 rounded-sm bg-brand-accent px-4 py-2 uppercase tracking-wide text-brand-primary transition-all hover:bg-brand-primary hover:text-brand-accent hover:ring-1 hover:ring-brand-accent"
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <form
+            onSubmit={handleFormSubmit}
+            action="#"
+            className="grid grid-cols-2 grid-rows-2 gap-4"
           >
-            Add Expense
-          </Button>
-        </form>
+            <div>
+              <label htmlFor="description">Description</label>
+              <input
+                className="w-full rounded-tiny px-2 py-1 ring-1 ring-brand-accent"
+                type="text"
+                id="description"
+                onChange={(e) => setDescription(e.target.value)}
+                value={description}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="amount">Amount</label>
+              <input
+                className="w-full rounded-tiny px-2 py-1 ring-1 ring-brand-accent"
+                type="number"
+                id="amount"
+                onChange={(e) => setAmount(Number(e.target.value))}
+                value={amount}
+                required
+              />
+            </div>
+            <div>
+              <Select
+                onValueChange={(value) => setCategory(value)}
+                value={category}
+                required
+              >
+                <SelectTrigger className="rounded-sm ring-1 ring-brand-accent">
+                  <SelectValue placeholder="Select a Category" />
+                </SelectTrigger>
+                <SelectContent className="bg-brand-accent text-brand-primary">
+                  <SelectGroup>
+                    <SelectLabel className="text-base">Categories</SelectLabel>
+                    {CATEGORIES.map((category) => (
+                      <SelectItem key={category.value} value={category.value}>
+                        {category.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <DatePicker date={date} setDate={setDate} />
+            </div>
+            <Button
+              type="submit"
+              className="col-start-2 flex items-center gap-2 rounded-sm bg-brand-accent px-4 py-2 uppercase tracking-wide text-brand-primary transition-all hover:bg-brand-primary hover:text-brand-accent hover:ring-1 hover:ring-brand-accent"
+            >
+              Add Expense
+            </Button>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   );
