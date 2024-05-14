@@ -19,11 +19,12 @@ export function isWithinRange(date: Date, start: Date, end: Date) {
 
 export const formatDate = (date: Date) => {
   // Create a new Date object
+  let dateFinal = new Date(date);
 
   // Get the year, month, and day
-  let year = date.getFullYear();
-  let month: number | string = date.getMonth() + 1; // Add 1 to the month (as it starts from 0)
-  let day: number | string = date.getDate();
+  let year = dateFinal.getFullYear();
+  let month: number | string = dateFinal.getMonth() + 1; // Add 1 to the month (as it starts from 0)
+  let day: number | string = dateFinal.getDate();
 
   // Pad month and day with leading zeros if needed
   month = month < 10 ? "0" + month : month;
@@ -34,3 +35,24 @@ export const formatDate = (date: Date) => {
 
   return formattedDate;
 };
+
+export function toCamelCase(str: string | undefined) {
+  if (!str) return str;
+  // Replace special characters and spaces with a hyphen
+  str = str.replace(/[^a-zA-Z0-9]+/g, "-");
+
+  // Split the string into words and convert them to lowercase
+  const words = str.toLowerCase().split("-");
+
+  // Capitalize the first character of each word except the first word
+  const camelCaseWords = words.map((word, index) => {
+    if (index === 0) {
+      return word;
+    } else {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+  });
+
+  // Join the words back into a single string
+  return camelCaseWords.join("");
+}

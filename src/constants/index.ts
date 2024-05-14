@@ -20,6 +20,15 @@ export const EXPENSE_TABLE_HEADERS = [
   "Date",
   "Category",
 ];
+export const BUDGET_TABLE_HEADERS = [
+  "ID",
+  "Amount",
+  "Spent",
+  "Remaining",
+  "Category",
+  "Start Date",
+  "End Date",
+];
 
 export const CATEGORIES = [
   { value: "rentMortgage", label: "Rent/Mortgage" },

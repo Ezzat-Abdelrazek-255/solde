@@ -33,6 +33,12 @@ const ExpensesTable = () => {
       } else {
         return secondElement - firstElement;
       }
+    } else if (firstElement instanceof Date && secondElement instanceof Date) {
+      if (expensesContext.sortType === "asc") {
+        return firstElement.getTime() - secondElement.getTime();
+      } else {
+        return secondElement.getTime() - firstElement.getTime();
+      }
     } else {
       if (expensesContext.sortType === "asc") {
         return 1;

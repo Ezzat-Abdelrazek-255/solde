@@ -10,6 +10,8 @@ const UpdateCard = ({
   expense: Expense;
   className?: string;
 }) => {
+  console.log(expense);
+
   return (
     <article
       className={cn(

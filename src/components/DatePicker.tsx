@@ -16,9 +16,11 @@ import {
 export function DatePicker({
   date,
   setDate,
+  label = "Pick a date",
 }: {
   date: Date | undefined;
   setDate: React.Dispatch<React.SetStateAction<Date>>;
+  label?: string;
 }) {
   return (
     <Popover>
@@ -31,7 +33,7 @@ export function DatePicker({
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {date ? format(date, "PPP") : <span>{label}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

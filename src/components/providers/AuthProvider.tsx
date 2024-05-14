@@ -54,7 +54,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!publicPaths.includes(pathname)) router.push("/");
       else router.push(pathname);
     } else {
-      if (pathname === "/") router.push("/dashboard");
+      if (pathname === "/" || pathname === "/sign-up")
+        router.push("/dashboard");
       else router.push(pathname);
     }
   }, [isLoggedIn, router, pathname]);

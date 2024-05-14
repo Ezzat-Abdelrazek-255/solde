@@ -28,7 +28,6 @@ const SignUpPage = () => {
       password,
     };
 
-    // console.log(event);
     const res = await fetch("/api/sign-up", {
       method: "POST",
       body: JSON.stringify(formData),
@@ -40,10 +39,11 @@ const SignUpPage = () => {
 
     setIsLoading(false);
     if (!user.data) return;
+    console.log(user);
 
-    router.push("/dashboard");
     authContext.setUserId(user.data.user._id);
     authContext.setIsLoggedIn(true);
+    router.push("/dashboard");
   };
 
   return (

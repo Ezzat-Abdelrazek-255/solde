@@ -37,8 +37,8 @@ const DataTable = ({
             key={cell[0]}
             className="border-brand-accent/20 font-bold hover:bg-primary-400"
           >
-            {cell.map((cell) => (
-              <TableCell key={cell}>
+            {cell.map((cell, i) => (
+              <TableCell key={i}>
                 {typeof cell === "object" && cell instanceof Date
                   ? cell.toISOString().slice(0, 10)
                   : cell}

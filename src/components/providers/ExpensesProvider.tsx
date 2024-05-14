@@ -4,7 +4,6 @@ import { EXPENSE_TABLE_HEADERS } from "@/constants";
 import React, { useEffect } from "react";
 import { useContext, createContext, useReducer } from "react";
 import Loader from "../Loader";
-import { connectDB } from "@/lib/db/connectDB";
 
 type ExpensesContextType = {
   FilteredExpenses: Expense[];

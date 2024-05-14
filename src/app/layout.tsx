@@ -5,6 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import ExpensesProvider from "@/components/providers/ExpensesProvider";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import BudgetsProvider from "@/components/providers/BudgetProvider";
 
 const cosiAzure = localFont({
   src: [
@@ -75,7 +76,9 @@ export default function RootLayout({
         )}
       >
         <AuthProvider>
-          <ExpensesProvider>{children}</ExpensesProvider>
+          <ExpensesProvider>
+            <BudgetsProvider>{children}</BudgetsProvider>
+          </ExpensesProvider>
         </AuthProvider>
       </body>
     </html>
