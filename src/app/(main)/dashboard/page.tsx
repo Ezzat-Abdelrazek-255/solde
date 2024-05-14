@@ -9,7 +9,10 @@ import { BUDGET_TABLE_HEADERS, EXPENSE_TABLE_HEADERS } from "@/constants";
 import { useRouter } from "next/navigation";
 
 const DashboardPage = () => {
-  const userId = localStorage.getItem("user-id");
+  const [userId, setUserId] = useState(() => {
+    if (localStorage) return localStorage.getItem("user-id");
+    else "";
+  });
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const router = useRouter();

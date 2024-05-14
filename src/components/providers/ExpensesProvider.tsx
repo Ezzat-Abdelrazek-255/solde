@@ -1,7 +1,7 @@
 "use client";
 
 import { EXPENSE_TABLE_HEADERS } from "@/constants";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext, createContext, useReducer } from "react";
 import Loader from "../Loader";
 
@@ -55,8 +55,10 @@ const ExpensesProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const userId = localStorage.getItem("user-id");
-
+  const [userId, setUserId] = React.useState(() => {
+    if (localStorage) return localStorage.getItem("user-id");
+    else "";
+  });
   useEffect(() => {
     async function getExpenses() {
       try {
