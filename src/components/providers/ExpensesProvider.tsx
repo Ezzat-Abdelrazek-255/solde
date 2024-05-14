@@ -56,14 +56,14 @@ const ExpensesProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const userId = localStorage.getItem("user-id");
+
   useEffect(() => {
     async function getExpenses() {
       try {
         setIsLoading(true);
 
-        const res = await fetch(
-          `/api/user/${localStorage.getItem("user-id")}/expenses`,
-        );
+        const res = await fetch(`/api/user/${userId}/expenses`);
         const { data } = await res.json();
         if (!data) return;
         const expenses = data.map(
@@ -92,7 +92,7 @@ const ExpensesProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
     getExpenses();
-  }, []);
+  }, [userId]);
 
   const resetFilters = () => {
     setFilters(filtersInitialState);

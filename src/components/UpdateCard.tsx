@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-
+import { formatDate } from "@/lib/utils";
 const UpdateCard = ({
   title,
   expense,
@@ -13,7 +13,7 @@ const UpdateCard = ({
   return (
     <article
       className={cn(
-        "bg-mesh-background-2 flex flex-col gap-6 rounded-md bg-cover bg-center px-6 py-8 text-white",
+        "flex flex-col gap-6 rounded-md bg-mesh-background-2 bg-cover bg-center px-6 py-8 text-white",
         className,
       )}
     >
@@ -23,7 +23,7 @@ const UpdateCard = ({
           Description: <strong>{expense.description}</strong>
         </li>
         <li>
-          Date: <strong>{expense.date}</strong>
+          Date: <strong>{formatDate(expense.date)}</strong>
         </li>
         <li>
           Amount: <strong>{expense.amount}$</strong>

@@ -34,7 +34,7 @@ const DataTable = ({
       <TableBody>
         {cells.map((cell, i) => (
           <TableRow
-            key={i}
+            key={cell[0]}
             className="border-brand-accent/20 font-bold hover:bg-primary-400"
           >
             {cell.map((cell) => (
